@@ -1,0 +1,177 @@
+==================
+If / else chain
+==================
+
+fn sign(n: Int): Int {
+    if n > 0 { 1 } else if n < 0 { -1 } else { 0 }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (if_expression
+          condition: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (number_literal))
+          consequence: (block
+            (expression_statement (number_literal)))
+          alternative: (else_clause
+            (if_expression
+              condition: (binary_expression
+                left: (identifier_expression (identifier))
+                right: (number_literal))
+              consequence: (block
+                (expression_statement (unary_expression operand: (number_literal))))
+              alternative: (else_clause
+                (block (expression_statement (number_literal)))))))))))
+
+==================
+If let pattern binding
+==================
+
+fn greet(u: Option<String>): String {
+    if let Some(name) = u {
+        "Hi, " + name
+    } else {
+        "Hi, stranger"
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type
+          name: (qualified_type (type_identifier))
+          type_arguments: (type_arguments
+            (named_type name: (qualified_type (type_identifier)))))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (if_expression
+          pattern: (variant_pattern
+            name: (qualified_type (type_identifier))
+            (variant_pattern_arguments
+              (identifier_pattern (identifier))))
+          scrutinee: (identifier_expression (identifier))
+          consequence: (block
+            (expression_statement
+              (binary_expression
+                left: (string_literal (string_content))
+                right: (identifier_expression (identifier)))))
+          alternative: (else_clause
+            (block
+              (expression_statement (string_literal (string_content))))))))))
+
+==================
+For loop with tuple destructuring
+==================
+
+fn sum_pairs(pairs: List<#(Int, Int)>): Int {
+    mutable let total = 0
+    for #(a, b) in pairs {
+        total = total + a + b
+    }
+    total
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type
+          name: (qualified_type (type_identifier))
+          type_arguments: (type_arguments
+            (tuple_type
+              (named_type name: (qualified_type (type_identifier)))
+              (named_type name: (qualified_type (type_identifier))))))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (let_statement
+        pattern: (identifier_pattern (identifier))
+        value: (number_literal))
+      (for_statement
+        pattern: (tuple_pattern
+          (identifier_pattern (identifier))
+          (identifier_pattern (identifier)))
+        iterable: (identifier_expression (identifier))
+        body: (block
+          (assignment_statement
+            target: (identifier_expression (identifier))
+            value: (binary_expression
+              left: (binary_expression
+                left: (identifier_expression (identifier))
+                right: (identifier_expression (identifier)))
+              right: (identifier_expression (identifier))))))
+      (expression_statement (identifier_expression (identifier))))))
+
+==================
+Let assert
+==================
+
+let ok = Ok(42)
+let assert Ok(value: n) = ok
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (call_expression
+      function: (type_identifier_expression (type_identifier))
+      arguments: (argument_list
+        (argument value: (number_literal)))))
+  (let_assert_statement
+    pattern: (variant_pattern
+      name: (qualified_type (type_identifier))
+      (variant_pattern_arguments
+        (field_pattern
+          name: (identifier)
+          value: (identifier_pattern (identifier)))))
+    value: (identifier_expression (identifier))))
+
+==================
+Return statement
+==================
+
+fn maybe(x: Int): Int {
+    if x == 0 { return 42 }
+    x
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (if_expression
+          condition: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (number_literal))
+          consequence: (block
+            (return_statement value: (number_literal)))))
+      (expression_statement (identifier_expression (identifier))))))

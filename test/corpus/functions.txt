@@ -1,0 +1,132 @@
+==================
+Plain function
+==================
+
+fn add(a: Int, b: Int): Int {
+    a + b
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier))))
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (binary_expression
+          left: (identifier_expression (identifier))
+          right: (identifier_expression (identifier)))))))
+
+==================
+Public function with generics
+==================
+
+pub fn id<T>(x: T): T {
+    x
+}
+
+---
+
+(source_file
+  (function_declaration
+    (access_modifier)
+    name: (identifier)
+    type_parameters: (type_parameters (type_identifier))
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (identifier_expression (identifier))))))
+
+==================
+Global function (strict propagation)
+==================
+
+global fn greet(name: String): String {
+    "Hello, " + name
+}
+
+---
+
+(source_file
+  (function_declaration
+    (access_modifier)
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (binary_expression
+          left: (string_literal (string_content))
+          right: (identifier_expression (identifier)))))))
+
+==================
+Anonymous function and closure
+==================
+
+let f = fn(x: Int): Int { x + 1 }
+let g = |x| x * 2
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (anonymous_function
+      parameters: (anonymous_function_parameters
+        (anonymous_function_parameter
+          pattern: (identifier_pattern (identifier))
+          type: (named_type name: (qualified_type (type_identifier)))))
+      return_type: (named_type name: (qualified_type (type_identifier)))
+      body: (block
+        (expression_statement
+          (binary_expression
+            left: (identifier_expression (identifier))
+            right: (number_literal))))))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (closure_expression
+      parameters: (closure_parameters
+        (closure_parameter name: (identifier)))
+      body: (binary_expression
+        left: (identifier_expression (identifier))
+        right: (number_literal)))))
+
+==================
+Default parameter value
+==================
+
+fn greet(name: String = "World"): String {
+    "Hi, " + name
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))
+        default: (string_literal (string_content))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (binary_expression
+          left: (string_literal (string_content))
+          right: (identifier_expression (identifier)))))))

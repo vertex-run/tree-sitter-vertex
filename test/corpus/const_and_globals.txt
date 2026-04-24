@@ -1,0 +1,90 @@
+==================
+Private const
+==================
+
+const max_retries = 3
+
+---
+
+(source_file
+  (const_declaration
+    name: (identifier)
+    value: (number_literal)))
+
+==================
+Public const with type
+==================
+
+pub const api_version: String = "v2"
+
+---
+
+(source_file
+  (const_declaration
+    (access_modifier)
+    name: (identifier)
+    type: (named_type name: (qualified_type (type_identifier)))
+    value: (string_literal (string_content))))
+
+==================
+Global const
+==================
+
+global const apiVersion = 1
+
+---
+
+(source_file
+  (const_declaration
+    (access_modifier)
+    name: (identifier)
+    value: (number_literal)))
+
+==================
+Global fn and type together
+==================
+
+global const apiVersion = 1
+
+global type GreetResult {
+    GreetResult(greeting: String),
+}
+
+global fn greet(name: String): GreetResult {
+    GreetResult(greeting: "Hi, " + name)
+}
+
+---
+
+(source_file
+  (const_declaration
+    (access_modifier)
+    name: (identifier)
+    value: (number_literal))
+  (type_declaration
+    (access_modifier)
+    name: (type_identifier)
+    (variant
+      name: (type_identifier)
+      (variant_fields
+        (variant_field
+          name: (identifier)
+          type: (named_type name: (qualified_type (type_identifier)))))))
+  (function_declaration
+    (access_modifier)
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (call_expression
+          function: (type_identifier_expression (type_identifier))
+          arguments: (argument_list
+            (named_argument
+              label: (identifier)
+              value: (binary_expression
+                left: (string_literal (string_content))
+                right: (identifier_expression (identifier))))))))))

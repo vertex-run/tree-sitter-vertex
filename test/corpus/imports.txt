@@ -1,0 +1,53 @@
+==================
+Bare import
+==================
+
+import lang.greeter
+
+fn run(): Void {
+    greeter.greet("World")
+}
+
+---
+
+(source_file
+  (import_declaration
+    path: (import_path (identifier) (identifier)))
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (call_expression
+          function: (field_access_expression
+            receiver: (identifier_expression (identifier))
+            field: (identifier))
+          arguments: (argument_list
+            (argument value: (string_literal (string_content)))))))))
+
+==================
+Aliased import
+==================
+
+import lang.farewell as bye
+
+---
+
+(source_file
+  (import_declaration
+    path: (import_path (identifier) (identifier))
+    alias: (identifier)))
+
+==================
+Selective import
+==================
+
+import lang.math_utils.{add, subtract}
+
+---
+
+(source_file
+  (import_declaration
+    path: (import_path (identifier) (identifier))
+    selected: (import_selection (identifier) (identifier))))

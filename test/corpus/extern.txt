@@ -1,0 +1,91 @@
+==================
+Extern type
+==================
+
+extern type Messaging.SingleEmailMessage
+
+---
+
+(source_file
+  (extern_type_declaration
+    name: (qualified_type (type_identifier) (type_identifier))))
+
+==================
+Extern fn with override
+==================
+
+extern fn Messaging.sendEmailChecked(
+    mails: List<Messaging.SingleEmailMessage>,
+    allOrNothing: Bool,
+): Void = "Messaging.sendEmail"
+
+---
+
+(source_file
+  (extern_fn_declaration
+    name: (extern_fn_name (type_identifier) (identifier))
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type
+          name: (qualified_type (type_identifier))
+          type_arguments: (type_arguments
+            (named_type name: (qualified_type (type_identifier) (type_identifier))))))
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    apex_override: (string_literal (string_content))))
+
+==================
+Extern new with named constructor
+==================
+
+extern new Messaging.SingleEmailMessage.withSubject(
+    subject: String,
+): Messaging.SingleEmailMessage
+
+---
+
+(source_file
+  (extern_new_declaration
+    name: (qualified_type (type_identifier) (type_identifier))
+    constructor_name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier) (type_identifier)))))
+
+==================
+Extern method, field, var, enum
+==================
+
+extern method Account.getName(self: Account): String
+extern field Messaging.InboundEmail.subject: String
+extern var Database.DMLOptions.allowFieldTruncation: Bool
+extern enum Schema.DisplayType { Address, Phone }
+
+---
+
+(source_file
+  (extern_method_declaration
+    receiver: (qualified_type (type_identifier))
+    method_name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier))))
+  (extern_field_declaration
+    receiver: (qualified_type (type_identifier) (type_identifier))
+    field_name: (identifier)
+    field_type: (named_type name: (qualified_type (type_identifier))))
+  (extern_var_declaration
+    receiver: (qualified_type (type_identifier) (type_identifier))
+    field_name: (identifier)
+    field_type: (named_type name: (qualified_type (type_identifier))))
+  (extern_enum_declaration
+    name: (qualified_type (type_identifier) (type_identifier))
+    (extern_enum_variant name: (type_identifier))
+    (extern_enum_variant name: (type_identifier))))

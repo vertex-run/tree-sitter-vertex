@@ -1,0 +1,83 @@
+==================
+List literal and spread
+==================
+
+let xs = [1, 2, 3]
+let ys = [0, ...xs, 4]
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (list_literal
+      (number_literal)
+      (number_literal)
+      (number_literal)))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (list_literal
+      (number_literal)
+      (spread_element (identifier_expression (identifier)))
+      (number_literal))))
+
+==================
+Set literal
+==================
+
+let s = #{1, 2, 3}
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (set_literal
+      (number_literal)
+      (number_literal)
+      (number_literal))))
+
+==================
+Map literal with type annotation
+==================
+
+let scores: Map<String, Int> = {"alice": 10, "bob": 20}
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    type: (named_type
+      name: (qualified_type (type_identifier))
+      type_arguments: (type_arguments
+        (named_type name: (qualified_type (type_identifier)))
+        (named_type name: (qualified_type (type_identifier)))))
+    value: (map_literal
+      (map_entry
+        key: (string_literal (string_content))
+        value: (number_literal))
+      (map_entry
+        key: (string_literal (string_content))
+        value: (number_literal)))))
+
+==================
+Tuple literal and destructuring
+==================
+
+let pair = #(10, 20)
+let #(a, b) = pair
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (tuple_expression
+      (number_literal)
+      (number_literal)))
+  (let_statement
+    pattern: (tuple_pattern
+      (identifier_pattern (identifier))
+      (identifier_pattern (identifier)))
+    value: (identifier_expression (identifier))))

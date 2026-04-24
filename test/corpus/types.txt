@@ -1,0 +1,102 @@
+==================
+Sum type with variants
+==================
+
+type Shape {
+    Circle(radius: Double),
+    Rectangle(width: Double, height: Double),
+    Triangle,
+}
+
+---
+
+(source_file
+  (type_declaration
+    name: (type_identifier)
+    (variant
+      name: (type_identifier)
+      (variant_fields
+        (variant_field
+          name: (identifier)
+          type: (named_type name: (qualified_type (type_identifier))))))
+    (variant
+      name: (type_identifier)
+      (variant_fields
+        (variant_field
+          name: (identifier)
+          type: (named_type name: (qualified_type (type_identifier))))
+        (variant_field
+          name: (identifier)
+          type: (named_type name: (qualified_type (type_identifier))))))
+    (variant
+      name: (type_identifier))))
+
+==================
+Public opaque type
+==================
+
+pub opaque type NonEmptyString {
+    NonEmptyString(value: String),
+}
+
+---
+
+(source_file
+  (type_declaration
+    (access_modifier)
+    name: (type_identifier)
+    (variant
+      name: (type_identifier)
+      (variant_fields
+        (variant_field
+          name: (identifier)
+          type: (named_type name: (qualified_type (type_identifier))))))))
+
+==================
+Type alias with generic
+==================
+
+type Transform<A, B> = fn(A): B
+
+---
+
+(source_file
+  (type_alias_declaration
+    name: (type_identifier)
+    type_parameters: (type_parameters (type_identifier) (type_identifier))
+    aliased: (function_type
+      (named_type name: (qualified_type (type_identifier)))
+      return_type: (named_type name: (qualified_type (type_identifier))))))
+
+==================
+Module-qualified type in generic
+==================
+
+type Catalog = List<books.Book>
+
+---
+
+(source_file
+  (type_alias_declaration
+    name: (type_identifier)
+    aliased: (named_type
+      name: (qualified_type (type_identifier))
+      type_arguments: (type_arguments
+        (named_type
+          module: (identifier)
+          name: (qualified_type (type_identifier)))))))
+
+==================
+Tuple type
+==================
+
+type Pair = #(Int, String)
+
+---
+
+(source_file
+  (type_alias_declaration
+    name: (type_identifier)
+    aliased: (tuple_type
+      (named_type name: (qualified_type (type_identifier)))
+      (named_type name: (qualified_type (type_identifier))))))

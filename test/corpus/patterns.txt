@@ -1,0 +1,164 @@
+==================
+Match with variant patterns
+==================
+
+fn describe(s: Shape): String {
+    match s {
+        Circle(radius: r) => "circle",
+        Rectangle(width: w, height: h) => "rect",
+        Triangle => "tri",
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (match_expression
+          subjects: (match_subjects (identifier_expression (identifier)))
+          (match_arm
+            pattern: (variant_pattern
+              name: (qualified_type (type_identifier))
+              (variant_pattern_arguments
+                (field_pattern
+                  name: (identifier)
+                  value: (identifier_pattern (identifier)))))
+            body: (string_literal (string_content)))
+          (match_arm
+            pattern: (variant_pattern
+              name: (qualified_type (type_identifier))
+              (variant_pattern_arguments
+                (field_pattern
+                  name: (identifier)
+                  value: (identifier_pattern (identifier)))
+                (field_pattern
+                  name: (identifier)
+                  value: (identifier_pattern (identifier)))))
+            body: (string_literal (string_content)))
+          (match_arm
+            pattern: (variant_pattern
+              name: (qualified_type (type_identifier)))
+            body: (string_literal (string_content))))))))
+
+==================
+OR patterns
+==================
+
+fn is_weekend(d: Weekday): Bool {
+    match d {
+        Saturday | Sunday => true,
+        _ => false,
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (match_expression
+          subjects: (match_subjects (identifier_expression (identifier)))
+          (match_arm
+            pattern: (or_pattern
+              (variant_pattern name: (qualified_type (type_identifier)))
+              (variant_pattern name: (qualified_type (type_identifier))))
+            body: (boolean_literal))
+          (match_arm
+            pattern: (wildcard_pattern)
+            body: (boolean_literal)))))))
+
+==================
+List patterns with rest
+==================
+
+fn tail(xs: List<Int>): List<Int> {
+    match xs {
+        [_, ...rest] => rest,
+        [h, ..] => [h],
+        _ => [],
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type
+          name: (qualified_type (type_identifier))
+          type_arguments: (type_arguments
+            (named_type name: (qualified_type (type_identifier)))))))
+    return_type: (named_type
+      name: (qualified_type (type_identifier))
+      type_arguments: (type_arguments
+        (named_type name: (qualified_type (type_identifier)))))
+    body: (block
+      (expression_statement
+        (match_expression
+          subjects: (match_subjects (identifier_expression (identifier)))
+          (match_arm
+            pattern: (list_pattern
+              (wildcard_pattern)
+              (list_rest_pattern binding: (identifier)))
+            body: (identifier_expression (identifier)))
+          (match_arm
+            pattern: (list_pattern
+              (identifier_pattern (identifier))
+              (list_rest_pattern))
+            body: (list_literal (identifier_expression (identifier))))
+          (match_arm
+            pattern: (wildcard_pattern)
+            body: (list_literal)))))))
+
+==================
+Guard
+==================
+
+fn grade(score: Int): String {
+    match score {
+        n if n >= 90 => "A",
+        _ => "F",
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type name: (qualified_type (type_identifier)))))
+    return_type: (named_type name: (qualified_type (type_identifier)))
+    body: (block
+      (expression_statement
+        (match_expression
+          subjects: (match_subjects (identifier_expression (identifier)))
+          (match_arm
+            pattern: (identifier_pattern (identifier))
+            guard: (binary_expression
+              left: (identifier_expression (identifier))
+              right: (number_literal))
+            body: (string_literal (string_content)))
+          (match_arm
+            pattern: (wildcard_pattern)
+            body: (string_literal (string_content))))))))

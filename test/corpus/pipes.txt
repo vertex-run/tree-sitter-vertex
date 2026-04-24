@@ -1,0 +1,73 @@
+==================
+Pipe chain
+==================
+
+debug 3 |> double |> inc
+
+---
+
+(source_file
+  (expression_statement
+    (debug_expression
+      value: (pipe_expression
+        value: (pipe_expression
+          value: (number_literal)
+          function: (identifier_expression (identifier)))
+        function: (identifier_expression (identifier))))))
+
+==================
+Pipe with placeholder
+==================
+
+debug 5 |> add(_, 3)
+
+---
+
+(source_file
+  (expression_statement
+    (debug_expression
+      value: (pipe_expression
+        value: (number_literal)
+        function: (call_expression
+          function: (identifier_expression (identifier))
+          arguments: (argument_list
+            (argument value: (placeholder_expression))
+            (argument value: (number_literal))))))))
+
+==================
+Try operator (?)
+==================
+
+fn step(x: Result<Int, String>): Result<Int, String> {
+    let y = x?
+    Ok(y)
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        pattern: (identifier_pattern (identifier))
+        type: (named_type
+          name: (qualified_type (type_identifier))
+          type_arguments: (type_arguments
+            (named_type name: (qualified_type (type_identifier)))
+            (named_type name: (qualified_type (type_identifier)))))))
+    return_type: (named_type
+      name: (qualified_type (type_identifier))
+      type_arguments: (type_arguments
+        (named_type name: (qualified_type (type_identifier)))
+        (named_type name: (qualified_type (type_identifier)))))
+    body: (block
+      (let_statement
+        pattern: (identifier_pattern (identifier))
+        value: (try_expression
+          value: (identifier_expression (identifier))))
+      (expression_statement
+        (call_expression
+          function: (type_identifier_expression (type_identifier))
+          arguments: (argument_list
+            (argument value: (identifier_expression (identifier)))))))))

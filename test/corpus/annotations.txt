@@ -1,0 +1,65 @@
+==================
+Annotated function
+==================
+
+@AuraEnabled
+pub fn getAccounts(): List<String> {
+    []
+}
+
+---
+
+(source_file
+  (annotated_declaration
+    (annotation name: (type_identifier))
+    (function_declaration
+      (access_modifier)
+      name: (identifier)
+      parameters: (parameter_list)
+      return_type: (named_type
+        name: (qualified_type (type_identifier))
+        type_arguments: (type_arguments
+          (named_type name: (qualified_type (type_identifier)))))
+      body: (block
+        (expression_statement (list_literal))))))
+
+==================
+Annotation with named args
+==================
+
+@AuraEnabled(cacheable: true)
+pub fn getCached(): Int { 0 }
+
+---
+
+(source_file
+  (annotated_declaration
+    (annotation
+      name: (type_identifier)
+      (annotation_arguments
+        (annotation_argument
+          label: (identifier)
+          value: (boolean_literal))))
+    (function_declaration
+      (access_modifier)
+      name: (identifier)
+      parameters: (parameter_list)
+      return_type: (named_type name: (qualified_type (type_identifier)))
+      body: (block (expression_statement (number_literal))))))
+
+==================
+Module-level annotation
+==================
+
+@WithoutSharing
+
+let jit_marker = "no-op"
+
+---
+
+(source_file
+  (bare_module_annotation
+    (annotation name: (type_identifier)))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (string_literal (string_content))))

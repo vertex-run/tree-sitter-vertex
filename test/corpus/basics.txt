@@ -1,0 +1,100 @@
+==================
+Hello World
+==================
+
+debug "hello, world"
+
+---
+
+(source_file
+  (expression_statement
+    (debug_expression
+      value: (string_literal
+        (string_content)))))
+
+==================
+Integer literals
+==================
+
+let a = 42
+let b = 0
+let c = 9999L
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (number_literal))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (number_literal))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (number_literal)))
+
+==================
+Double and Decimal literals
+==================
+
+let a = 1.5
+let b = 1.5e10
+let c = 3.14E-2
+let d = 9.99d
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (number_literal))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (number_literal))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (number_literal))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (number_literal)))
+
+==================
+Booleans and comments
+==================
+
+// this is a comment
+let flag = true
+let other = false
+
+---
+
+(source_file
+  (line_comment)
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (boolean_literal))
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (boolean_literal)))
+
+==================
+String with interpolation
+==================
+
+let name = "World"
+debug "Hello, ${name}!"
+
+---
+
+(source_file
+  (let_statement
+    pattern: (identifier_pattern (identifier))
+    value: (string_literal
+      (string_content)))
+  (expression_statement
+    (debug_expression
+      value: (string_literal
+        (string_content)
+        (string_interpolation
+          value: (identifier_expression (identifier)))
+        (string_content)))))
